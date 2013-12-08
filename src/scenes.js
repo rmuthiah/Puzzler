@@ -26,9 +26,9 @@ Crafty.scene('Game', function() {
     for (var y = 0; y < Game.map_grid.height; y++) {
       // var at_edge = x == 0 || x == Game.map_grid.width - 1 || y == 0 || y == Game.map_grid.height - 1;
 
-      if (Math.random() < 0.06) {
-        Crafty.e('Platform').attr({x:31*x,y:16*y,w:31,h:18});
-      }
+      // if (Math.random() < 0.06) {
+      //   Crafty.e('Platform').attr({x:31*x,y:16*y,w:31,h:18});
+      // }
     }
   }
 
@@ -103,7 +103,30 @@ Crafty.scene('Loading', function(){
               'assets/door_knock_3x.aac']
     });
     
-    // Now that our sprites are ready to draw, start the game
+    // I added from here to 
+    var player = Crafty.e("2D");
+    var plats = new Array();
+    var curIdx = 0;
+    var numPlats = 0;
+
+    player.onMouseDown = function(e) {
+        console.log(e.x, e.y);
+        if(numPlats > 2) {
+            plats[curIdx].destroy();
+        }
+        plats[curIdx] = Crafty.e('Platform').attr({x:e.x-14,y:e.y-10,w:10,h:5});
+        curIdx = (curIdx + 1) % 3;
+        numPlats = numPlats + 1;
+    };
+
+    Crafty.addEvent(player, Crafty.stage.elem, "mousedown", player.onMouseDown);
+    // here
+
+    // What I added allows the player to only have three platforms at any time
+    // and destorys the oldest platform to make way for the new one
+
+    // Thoughts?
+
     Crafty.scene('Game');
   })
 });
